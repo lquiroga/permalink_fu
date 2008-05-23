@@ -21,11 +21,13 @@ module PermalinkFu
   end
   
   def self.included(base)
-    base.extend ClassMethods
-    class << base
-      attr_accessor :permalink_options
-      attr_accessor :permalink_attributes
-      attr_accessor :permalink_field
+    base.class_eval do
+      extend ClassMethods
+
+      # using class-inheritable attributes so that they work with STI
+      class_inheritable_hash :permalink_options
+      class_inheritable_array :permalink_attributes
+      class_inheritable_accessor :permalink_field
     end
   end
   

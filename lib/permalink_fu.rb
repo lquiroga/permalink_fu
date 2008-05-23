@@ -76,10 +76,11 @@ module PermalinkFu
   module ClassMethods
     def self.setup_permalink_fu_on(base)
       base.extend self
-      class << base
-        attr_accessor :permalink_options
-        attr_accessor :permalink_attributes
-        attr_accessor :permalink_field
+      base.class_eval do
+        # using class-inheritable attributes so that they work with STI
+        class_inheritable_hash :permalink_options
+        class_inheritable_array :permalink_attributes
+        class_inheritable_accessor :permalink_field
       end
       base.send :include, InstanceMethods
 

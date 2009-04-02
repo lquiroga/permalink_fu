@@ -13,6 +13,7 @@ gem 'activesupport'
 require 'active_support/core_ext/blank'
 require 'active_support/core_ext/array'
 require 'active_support/core_ext/class/inheritable_attributes'
+require 'active_support/core_ext/object/misc'
 
 class FauxColumn < Struct.new(:limit)
 end

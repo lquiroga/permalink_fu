@@ -98,10 +98,9 @@ module PermalinkFu
     end
 
     def define_attribute_methods_with_permalinks
-      if value = define_attribute_methods_without_permalinks
+      returning define_attribute_methods_without_permalinks do
         evaluate_attribute_method permalink_field, "def #{self.permalink_field}=(new_value);write_attribute(:#{self.permalink_field}, new_value.blank? ? '' : PermalinkFu.escape(new_value));end", "#{self.permalink_field}="
       end
-      value
     end
   end
 

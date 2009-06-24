@@ -220,16 +220,39 @@ end
 # trying to be like ActiveRecord, define the attribute methods manually
 BaseModel.subclasses.each { |c| c.send :define_attribute_methods }
 
-class PermalinkFuTest < Test::Unit::TestCase
-  @@samples = {
-    'This IS a Tripped out title!!.!1  (well/ not really)'.freeze => 'this-is-a-tripped-out-title1-well-not-really'.freeze,
-    '////// meph1sto r0x ! \\\\\\'.freeze => 'meph1sto-r0x'.freeze,
-    'āčēģīķļņū'.freeze => 'acegiklnu'.freeze,
-    '中文測試 chinese text'.freeze => 'chinese-text'.freeze,
-    'fööbär'.freeze => 'foobar'.freeze
-  }
+SAMPLES = {
+  'This IS a Tripped out title!!.!1  (well/ not really)'.freeze => 'this-is-a-tripped-out-title1-well-not-really'.freeze,
+  '////// meph1sto r0x ! \\\\\\'.freeze => 'meph1sto-r0x'.freeze,
+  'āčēģīķļņū'.freeze => 'acegiklnu'.freeze,
+  '中文測試 chinese text'.freeze => 'chinese-text'.freeze,
+  'fööbär'.freeze => 'foobar'.freeze
+}
 
-  @@extra = { 'some-)()()-ExtRa!/// .data==?>    to \/\/test'.freeze => 'some-extra-data-to-test'.freeze }
+EXTRA = { 'some-)()()-ExtRa!/// .data==?>    to \/\/test'.freeze => 'some-extra-data-to-test'.freeze }
+
+ESCAPES = {
+  'the permalink'.freeze => 'the-permalink'.freeze,
+  'BO'.freeze => 'bo'.freeze,
+  'old permalink'.freeze => 'old-permalink'.freeze,
+  'old title'.freeze => 'old-title'.freeze,
+  'new title'.freeze => 'new-title'.freeze
+}
+
+SAMPLES.each do |sample_before, sample_after|
+  EXTRA.each do |extra_before, extra_after|
+    ESCAPES["#{sample_before} #{extra_before}"] = "#{sample_after}-#{extra_after}"
+  end
+end
+
+class String
+  def parameterize
+    ESCAPES[self] || SAMPLES[self] || self
+  end
+end
+
+class PermalinkFuTest < Test::Unit::TestCase
+  @@samples = SAMPLES
+  @@extra = EXTRA
 
   def test_should_escape_permalinks
     @@samples.each do |from, to|

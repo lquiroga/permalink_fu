@@ -4,6 +4,9 @@ module PermalinkFu
     # This method does the actual permalink escaping.
     def escape(string)
       result = string.parameterize
+      #GRANTAIRE MODIFICATION
+      result.gsub!(/[ \-]+/i,      '_') # We want underscores instead of dashes
+      #END GRANTAIRE MODIFICATION
       result.size.zero? ? random_permalink(string) : result
     rescue
       random_permalink(string)

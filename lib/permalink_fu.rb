@@ -15,7 +15,7 @@ module PermalinkFu
       result = ((translation_to && translation_from) ? Iconv.iconv(translation_to, translation_from, string) : string).to_s
       result.gsub!(/[^\x00-\x7F]+/, '') # Remove anything non-ASCII entirely (e.g. diacritics).
       result.gsub!(/[^\w_ \-]+/i,   '') # Remove unwanted chars.
-      result.gsub!(/[ \-]+/i,      '-') # No more than one of the separator in a row.
+      result.gsub!(/[ \-]+/i,      '_') # No more than one of the separator in a row.
       result.gsub!(/^\-|\-$/i,      '') # Remove leading/trailing separator.
       result.downcase!
       result.size.zero? ? random_permalink(string) : result
